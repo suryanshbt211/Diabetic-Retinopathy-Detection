@@ -1,26 +1,27 @@
-Diabetic Retinopathy Detection using Deep Learning
-==================================================
+# Diabetic Retinopathy Detection using Deep Learning
+
+---
 
 ## Project Overview
 
-This project investigates the use of **deep learning–based computer vision techniques** for the **automatic detection and severity classification of Diabetic Retinopathy (DR)** from retinal fundus images. Diabetic Retinopathy is a diabetes-related ocular disease that progressively damages the retina and can lead to irreversible blindness if not detected at an early stage.
+This project investigates the application of **deep learning–based computer vision techniques** for the **automatic detection and severity classification of Diabetic Retinopathy (DR)** from retinal fundus images. Diabetic Retinopathy is a diabetes-related ocular disease that progressively damages the retina and can lead to irreversible blindness if not detected at an early stage.
 
-The work is motivated by the limitations of manual screening procedures, which are **time-consuming, subjective, and difficult to scale** in regions with limited access to ophthalmologists. The objective of this project is to design and evaluate a **robust, reproducible, and scalable machine learning pipeline** that can assist in large-scale screening by classifying retinal images into clinically defined DR severity levels.
+The motivation for this work arises from the limitations of manual screening procedures, which are **time-consuming, subjective, and difficult to scale**, especially in regions with limited access to ophthalmologists. The objective of this project is to design and evaluate a **robust, reproducible, and scalable machine learning pipeline** capable of classifying retinal images into clinically defined DR severity levels.
 
-* * *
+---
 
 ## Problem Statement
 
 Diabetic Retinopathy screening traditionally relies on expert interpretation of fundus images. This process faces several challenges:
 
-- Lack of early symptoms in initial stages of the disease  
+- Lack of visible symptoms in early stages of the disease  
 - High dependence on trained specialists  
-- Inconsistency due to subjective interpretation  
+- Variability due to subjective interpretation  
 - Limited scalability for population-level screening  
 
-From a machine learning perspective, the problem is formulated as a **multi-class image classification task** with five severity levels. The task is further complicated by **class imbalance**, **subtle visual differences between stages**, and the **ordinal nature of disease progression**.
+From a machine learning perspective, the problem is formulated as a **multi-class image classification task** with five severity levels. The task is further complicated by **class imbalance**, **subtle inter-class visual differences**, and the **ordinal nature of disease progression**.
 
-* * *
+---
 
 ## Dataset Description
 
@@ -35,18 +36,18 @@ From a machine learning perspective, the problem is formulated as a **multi-clas
   - 4 – Proliferative DR  
 - **Image type**: High-resolution color fundus photographs  
 
-The dataset reflects real clinical distributions and is **highly imbalanced**, with a majority of samples belonging to the “No DR” class. This characteristic was preserved to ensure realistic model evaluation.
+The dataset reflects real-world clinical distributions and is **highly imbalanced**, with a majority of samples belonging to the “No DR” class. This characteristic was preserved to ensure realistic evaluation.
 
-* * *
+---
 
 ## Methodology
 
 ### Data Preprocessing
 
-- Image normalization (pixel values scaled to [0,1])  
-- Resizing to a fixed resolution (728 × 728 × 3)  
+- Image normalization (pixel values scaled to [0, 1])  
+- Resizing images to a fixed resolution (728 × 728 × 3)  
 - Removal of invalid or corrupted images  
-- Label formatting for categorical learning  
+- Label formatting for categorical classification  
 
 ### Data Augmentation
 
@@ -54,45 +55,113 @@ The dataset reflects real clinical distributions and is **highly imbalanced**, w
 - Train–validation split (80% / 20%)  
 - Augmentation used as a regularization strategy to improve generalization  
 
-* * *
+---
+
+## System Workflow (Activity Diagram)
+
+The activity diagram illustrates the complete operational workflow of the proposed system. It captures the sequence of operations from retinal image acquisition to final DR severity prediction.
+
+<p align="center">
+  <img src="Figs/ActivityDiagram.png" width="600"/>
+</p>
+
+The workflow includes data loading, preprocessing, augmentation, model initialization, training, performance evaluation, validation, and final testing to generate the diagnosis output.
+
+---
+
+## System Architecture (Block Diagram)
+
+The block diagram presents a high-level architectural view of the system and highlights the major processing stages involved in the pipeline.
+
+<p align="center">
+  <img src="Figs/BlockDiagram.png" width="700"/>
+</p>
+
+It illustrates how retinal images pass through preprocessing, augmentation, feature extraction, data splitting, CNN model training, evaluation, and final diagnosis level identification.
+
+---
+
+## Data Flow Diagrams
+
+### Level 0 Data Flow Diagram
+
+The Level-0 Data Flow Diagram represents the system as a single black-box process. It emphasizes the interaction between the user and the system, where the user provides a retinal image and receives the predicted DR level as output.
+
+<p align="center">
+  <img src="Figs/Level0_DFD.png" width="550"/>
+</p>
+
+---
+
+### Level 1 Data Flow Diagram
+
+The Level-1 Data Flow Diagram decomposes the system into major functional modules such as preprocessing, feature extraction, training, evaluation, and testing.
+
+<p align="center">
+  <img src="Figs/Level1_DFD.png" width="650"/>
+</p>
+
+This level provides insight into how data flows between the primary processing components.
+
+---
+
+### Level 2 Data Flow Diagram
+
+The Level-2 Data Flow Diagram provides a detailed expansion of internal operations, including image resizing, cropping, model parameter initialization, performance metric computation, and confusion matrix generation.
+
+<p align="center">
+  <img src="Figs/Level2_DFD.png" width="700"/>
+</p>
+
+This diagram offers a fine-grained view of data movement across sub-processes and evaluation stages.
+
+---
+
+## Use Case Diagram
+
+The use case diagram illustrates the functional interactions between the user and the Diabetic Retinopathy detection system.
+
+<p align="center">
+  <img src="Figs/UseCaseDiagram.png" width="700"/>
+</p>
+
+It highlights system capabilities such as preprocessing, data augmentation, feature extraction, model training, evaluation, and DR severity detection, emphasizing modular system design.
+
+---
 
 ## Model Architectures
 
-The project evaluates and compares multiple **transfer learning–based CNN architectures**, all pretrained on ImageNet and fine-tuned on the DR dataset.
+The project evaluates multiple **transfer learning–based CNN architectures**, all pretrained on ImageNet and fine-tuned on the DR dataset.
 
-### 1. ResNet50
-
+### ResNet50
 - Residual connections to mitigate vanishing gradients  
 - Global Average Pooling followed by fully connected layers  
-- Used as a baseline deep CNN architecture  
+- Used as a baseline architecture  
 
-### 2. ResNet50 + VGG16 (Ensemble)
-
+### ResNet50 + VGG16 (Ensemble)
 - Combines residual learning with deep convolutional feature extraction  
-- Demonstrates improved convergence and validation accuracy over the baseline  
+- Improves convergence and validation accuracy  
 
-### 3. ResNet50 + Xception (Final Model)
+### ResNet50 + Xception (Final Model)
+- Employs depthwise separable convolutions  
+- Better captures fine-grained retinal features  
+- Achieved the best overall performance  
 
-- Xception architecture employs depthwise separable convolutions  
-- More effective at capturing fine-grained retinal features  
-- Achieved the best overall performance among evaluated models  
-
-* * *
+---
 
 ## Training Strategy
 
-- **Transfer Learning**: ImageNet-pretrained weights  
-- **Two-Phase Training**:
+- Transfer learning using ImageNet-pretrained weights  
+- Two-phase training:
   - Warm-up phase with frozen backbone layers and higher learning rate  
   - Fine-tuning phase with unfrozen layers and reduced learning rate  
-- **Optimization Techniques**:
+- Optimization techniques:
   - Adam optimizer  
-  - Early stopping to prevent overfitting  
-  - ReduceLROnPlateau for adaptive learning rate scheduling  
-- **Reproducibility**:
-  - Fixed random seeds for Python, NumPy, and TensorFlow  
+  - Early stopping  
+  - ReduceLROnPlateau learning rate scheduling  
+- Reproducibility ensured via fixed random seeds  
 
-* * *
+---
 
 ## Evaluation Metrics
 
@@ -101,9 +170,9 @@ Model performance was evaluated using:
 - Accuracy  
 - Precision, Recall, and F1-Score (class-wise)  
 - Confusion Matrix  
-- **Quadratic Cohen’s Kappa Score**, which is particularly relevant for ordinal classification problems such as disease severity grading  
+- Quadratic Cohen’s Kappa Score (for ordinal severity evaluation)  
 
-* * *
+---
 
 ## Results
 
@@ -113,60 +182,54 @@ Model performance was evaluated using:
 | ResNet50 + VGG16 | 0.66 |
 | ResNet50 + Xception | **0.72** |
 
-The ensemble of ResNet and Xception demonstrated superior generalization, reduced validation loss, and improved classification consistency compared to single-model approaches.
+The ensemble of ResNet and Xception demonstrated superior generalization, reduced validation loss, and improved classification consistency.
 
-* * *
+---
 
 ## Tools and Technologies Used
 
 ### Programming Language
-
 - Python  
 
-### Deep Learning & ML Frameworks
-
+### Deep Learning Frameworks
 - TensorFlow  
 - Keras  
 
-### Data Processing & Visualization
-
+### Data Processing and Visualization
 - NumPy  
 - Pandas  
 - OpenCV  
 - Matplotlib  
 - Seaborn  
 
-### Evaluation & Utilities
-
+### Evaluation Utilities
 - scikit-learn  
-- Confusion matrix and Cohen’s Kappa metrics  
 
 ### Development Environment
-
 - Google Colab (GPU-accelerated)  
 
-* * *
+---
 
 ## Limitations
 
 - Class imbalance affects recall for severe DR stages  
-- Categorical cross-entropy does not explicitly model ordinal relationships  
+- Categorical loss does not explicitly model ordinal severity relationships  
 - High-resolution images increase computational cost  
-- Model is not optimized for deployment on edge or mobile devices  
+- Not optimized for edge or mobile deployment  
 
-* * *
+---
 
 ## Future Scope
 
-- Incorporation of ordinal regression or custom loss functions  
-- Class-weighted or focal loss to address imbalance  
-- Lightweight architectures (e.g., MobileNet, EfficientNet)  
+- Ordinal regression–based loss functions  
+- Class-weighted or focal loss  
+- Lightweight architectures (MobileNet, EfficientNet)  
 - Attention mechanisms for lesion localization  
-- Training on larger, multi-institutional datasets  
+- Larger multi-institutional datasets  
 
-* * *
+---
 
 ## Conclusion
 
-This project demonstrates a **systematic, research-oriented application of deep learning** to a clinically relevant medical imaging problem. Through architectural comparison, transfer learning, and careful evaluation, the work highlights both the potential and limitations of CNN-based DR detection systems. The project emphasizes **methodology, reproducibility, and evaluation rigor**, aligning with best practices in applied machine learning research.
+This project demonstrates a **systematic, research-oriented application of deep learning** to a clinically relevant medical imaging problem. Through architectural comparison, transfer learning, and rigorous evaluation, the work highlights both the potential and limitations of CNN-based Diabetic Retinopathy detection systems, emphasizing reproducibility, methodological clarity, and evaluation rigor.
 
